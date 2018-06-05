@@ -106,5 +106,68 @@ Weather
 Weather[[1]][1,1]
 Weather$Chicago[1,1]
 lapply(Weather, "[",1,1) #Weather$Chicago[1,1], Weather$NewYork[1,1]...
-lapply(Weather,"[",1,) #Weather$Chicago[1,], Weather$NewYork[1,]...
+lapply(Weather,"[",1, ) #Weather$Chicago[1,], Weather$NewYork[1,]...
 lapply(Weather,"[", ,3) #Weather$Chicago[,3], Weather$NewYork[,3]...
+
+#adding your own functions
+Weather
+lapply(Weather, rowMeans)
+lapply(Weather, function(x) x[1,]) #extracts the first row of each element in the list
+lapply(Weather, function(x) x[5,])
+lapply(Weather, function(x) x[,12]) #extracts December month of each element in the list
+lapply(Weather, function(z) z[1,]-z[2,]) 
+lapply(Weather, function(z) round((z[1,]-z[2,])/z[2,],2)) # % temp fluctuation from high to low in each city
+ 
+#Using sapply
+Weather
+#AvgHigh_F for July:
+#with lapply:
+lapply(Weather,"[",1,7)
+#with sapply:
+sapply(Weather,"[",1,7)
+
+#AvgHigh_F for the 4th quarter:
+lapply(Weather, "[",1,10:12)
+sapply(Weather, "[",1,10:12)
+
+#Another example:
+lapply(Weather, rowMeans)
+sapply(Weather, rowMeans)
+round(sapply(Weather, rowMeans),2)
+
+#another example:
+lapply(Weather, function(z) round((z[1,]-z[2,])/z[2,],2))
+sapply(Weather, function(z) round((z[1,]-z[2,])/z[2,],2))
+
+#by the way:
+sapply(Weather, rowMeans, simplify = FALSE) #same as lapply
+
+#nesting apply functions
+Weather
+apply(Chicago, 1, max)
+#apply across whole list
+lapply(Weather, apply, 1, max) #lapply will iterate over through the weather list, it will pass on those matrices one by one,
+                              #it will take the matrix and add on these optional arguments    
+lapply(Weather, function(x) apply(x,1,max)) #same as above, just a different approach..
+
+#tidy up:
+sapply(Weather, apply, 1, max)
+sapply(Weather, apply, 1, min)
+
+#which.max
+which.max(Chicago[1,]) #returns the maximum value in the first row of Chicago, since its a named vector it will return the output with the name
+names(which.max(Chicago[1,]))
+#by the sounds of it:
+#we will have: apply - to iterate over rows of the matrix,
+#and we will have: lapply or sapply - to iterate over component of the list
+apply(Chicago,1, function(x) names(which.max(x)))
+lapply(Weather, function(y) apply(y,1, function(x) names(which.max(x))))
+sapply(Weather, function(y) apply(y,1, function(x) names(which.max(x))))
+sapply(Weather, function(y) apply(y,1, function(x) names(which.min(x))))
+ 
+
+
+
+
+
+
